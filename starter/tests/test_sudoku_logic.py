@@ -41,6 +41,27 @@ def test_fill_board_creates_a_complete_valid_solution():
     )
 
 
+def test_has_unique_solution_accepts_a_completed_board():
+    board = sudoku_logic.create_empty_board()
+    sudoku_logic.fill_board(board)
+
+    assert sudoku_logic.has_unique_solution(board) is True
+
+
+def test_has_unique_solution_rejects_a_board_with_multiple_solutions():
+    board = sudoku_logic.create_empty_board()
+
+    assert sudoku_logic.has_unique_solution(board) is False
+
+
+def test_has_unique_solution_rejects_invalid_board():
+    board = sudoku_logic.create_empty_board()
+    board[0][0] = 1
+    board[0][1] = 1
+
+    assert sudoku_logic.has_unique_solution(board) is False
+
+
 def test_generate_puzzle_returns_solution_and_requested_number_of_clues():
     puzzle, solution = sudoku_logic.generate_puzzle(clues=35)
 
@@ -53,3 +74,4 @@ def test_generate_puzzle_returns_solution_and_requested_number_of_clues():
         for col in range(sudoku_logic.SIZE)
     )
     assert all(sorted(row) == list(range(1, sudoku_logic.SIZE + 1)) for row in solution)
+    assert sudoku_logic.has_unique_solution(puzzle) is True
