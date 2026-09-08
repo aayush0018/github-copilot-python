@@ -1,6 +1,7 @@
 // Client-side rendering and interaction for the Flask-backed Sudoku
 const SIZE = 9;
 const LEADERBOARD_KEY = 'sudokuLeaderboard';
+const THEME_KEY = 'sudokuTheme';
 const MAX_SCORES = 10;
 const DIFFICULTIES = {
   easy: {label: 'Easy', clues: 45},
@@ -11,6 +12,32 @@ let puzzle = [];
 let timerId = null;
 let gameStartedAt = null;
 let gameCompleted = false;
+
+function applyTheme(theme) {
+  const selectedTheme = theme === 'dark' ? 'dark' : 'light';
+  document.documentElement.dataset.theme = selectedTheme;
+  const toggle = document.getElementById('theme-toggle');
+  toggle.innerText = selectedTheme === 'dark' ? 'Light Mode' : 'Dark Mode';
+  toggle.setAttribute('aria-pressed', selectedTheme === 'dark' ? 'true' : 'false');
+}
+
+function loadTheme() {
+  try {
+    return localStorage.getItem(THEME_KEY) === 'dark' ? 'dark' : 'light';
+  } catch (error) {
+    return 'light';
+  }
+}
+
+function toggleTheme() {
+  const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  try {
+    localStorage.setItem(THEME_KEY, nextTheme);
+  } catch (error) {
+    // The theme still applies when storage is unavailable.
+  }
+  applyTheme(nextTheme);
+}
 
 function formatTime(totalSeconds) {
   const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
@@ -137,6 +164,24 @@ async function newGame() {
   startTimer();
 }
 
+async function requestHint() {
+  const res = await fetch('/hint');
+  const data = await res.json();
+  const msg = document.getElementById('message');
+  if (data.error) {
+    msg.style.color = 'var(--message-error)';
+    msg.innerText = data.error;
+    return;
+  }
+  const index = data.row * SIZE + data.col;
+  const input = document.getElementById('sudoku-board').getElementsByTagName('input')[index];
+  input.value = data.value;
+  input.disabled = true;
+  input.className = 'sudoku-cell hinted';
+  msg.style.color = 'var(--message-success)';
+  msg.innerText = 'One cell was filled in for you.';
+}
+
 async function checkSolution() {
   const boardDiv = document.getElementById('sudoku-board');
   const inputs = boardDiv.getElementsByTagName('input');
@@ -157,7 +202,7 @@ async function checkSolution() {
   const data = await res.json();
   const msg = document.getElementById('message');
   if (data.error) {
-    msg.style.color = '#d32f2f';
+    msg.style.color = 'var(--message-error)';
     msg.innerText = data.error;
     return;
   }
@@ -182,17 +227,20 @@ async function checkSolution() {
         recordScore(name, elapsed, settings.label);
       }
     }
-    msg.style.color = '#388e3c';
+    msg.style.color = 'var(--message-success)';
     msg.innerText = 'Congratulations! You solved it!';
   } else {
-    msg.style.color = '#d32f2f';
+    msg.style.color = 'var(--message-error)';
     msg.innerText = 'Some cells are incorrect.';
   }
 }
 
 // Wire buttons
 window.addEventListener('load', () => {
+  applyTheme(loadTheme());
+  document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
   document.getElementById('new-game').addEventListener('click', newGame);
+  document.getElementById('hint').addEventListener('click', requestHint);
   document.getElementById('check-solution').addEventListener('click', checkSolution);
   renderLeaderboard();
   // initialize

@@ -75,6 +75,13 @@ def has_unique_solution(board):
         return False
     return _count_solutions(candidate, limit=2) == 1
 
+def get_hint(puzzle, solution):
+    for row in range(SIZE):
+        for col in range(SIZE):
+            if puzzle[row][col] == EMPTY:
+                return {'row': row, 'col': col, 'value': solution[row][col]}
+    return None
+
 def remove_cells(board, clues):
     attempts = SIZE * SIZE - clues
     while attempts > 0:
