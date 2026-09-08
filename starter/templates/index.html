@@ -7,12 +7,30 @@
 </head>
 <body>
   <h1>Sudoku Game</h1>
+  <div class="game-options">
+    <label for="difficulty">Difficulty</label>
+    <select id="difficulty">
+      <option value="easy" data-clues="45">Easy</option>
+      <option value="medium" data-clues="35" selected>Medium</option>
+      <option value="hard" data-clues="30">Hard</option>
+    </select>
+    <span>Time: <strong id="timer">00:00</strong></span>
+  </div>
   <div id="sudoku-board"></div>
   <div class="controls">
     <button id="new-game">New Game</button>
     <button id="check-solution">Check Solution</button>
     <span id="message"></span>
   </div>
+  <section id="leaderboard" aria-labelledby="leaderboard-title">
+    <h2 id="leaderboard-title">Top 10</h2>
+    <table>
+      <thead>
+        <tr><th>Rank</th><th>Player</th><th>Time</th><th>Difficulty</th></tr>
+      </thead>
+      <tbody id="leaderboard-body"></tbody>
+    </table>
+  </section>
   <script src="/static/main.js"></script>
 </body>
 </html>

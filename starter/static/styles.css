@@ -83,3 +83,31 @@ button:hover {
     font-size: 16px;
     color: #d32f2f;
 }
+
+.game-options {
+    margin: 20px auto;
+}
+
+.game-options label,
+.game-options select,
+.game-options span {
+    margin: 0 8px;
+    font-size: 16px;
+}
+
+#leaderboard {
+    width: min(600px, 90%);
+    margin: 30px auto;
+}
+
+#leaderboard table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+#leaderboard th,
+#leaderboard td {
+    padding: 8px;
+    border: 1px solid #bbb;
+}

@@ -9,6 +9,9 @@ def test_index_returns_sudoku_page(client):
 
     assert response.status_code == 200
     assert b'Sudoku Game' in response.data
+    assert b'leaderboard-body' in response.data
+    assert b'id="difficulty"' in response.data
+    assert b'id="timer"' in response.data
 
 
 def test_new_game_returns_puzzle_with_default_number_of_clues(client):
