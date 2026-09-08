@@ -119,6 +119,7 @@ function createBoardElement() {
       input.type = 'text';
       input.maxLength = 1;
       input.className = 'sudoku-cell';
+      input.classList.add((Math.floor(i / 3) + Math.floor(j / 3)) % 2 === 0 ? 'block-light' : 'block-dark');
       input.dataset.row = i;
       input.dataset.col = j;
       input.addEventListener('input', (e) => {

@@ -42,3 +42,16 @@ def test_frontend_persists_and_applies_selected_theme():
     assert 'function toggleTheme()' in source
     assert "document.documentElement.dataset.theme = selectedTheme;" in source
     assert "localStorage.setItem(THEME_KEY, nextTheme);" in source
+
+
+def test_frontend_maps_all_difficulties_and_alternates_sudoku_blocks():
+    source = MAIN_JS.read_text()
+    styles = (MAIN_JS.parent / 'styles.css').read_text()
+
+    assert 'easy: {label: \'Easy\', clues: 45}' in source
+    assert 'medium: {label: \'Medium\', clues: 35}' in source
+    assert 'hard: {label: \'Hard\', clues: 30}' in source
+    assert 'block-light' in source
+    assert 'block-dark' in source
+    assert '.sudoku-cell.block-light' in styles
+    assert '.sudoku-cell.block-dark' in styles

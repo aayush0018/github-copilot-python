@@ -12,6 +12,8 @@
     --message-success: #388e3c;
     --incorrect-background: #ffcdd2;
     --hint-background: #fff3cd;
+    --block-light-background: #fafafa;
+    --block-dark-background: #edf3f8;
 }
 
 :root[data-theme="dark"] {
@@ -28,6 +30,8 @@
     --message-success: #8be0a2;
     --incorrect-background: #873f4b;
     --hint-background: #63551e;
+    --block-light-background: #202a36;
+    --block-dark-background: #2d3b4a;
 }
 
 body {
@@ -75,6 +79,14 @@ h1 {
     background: var(--cell-background);
     color: var(--text-color);
     transition: background 0.2s;
+}
+
+.sudoku-cell.block-light {
+    background: var(--block-light-background);
+}
+
+.sudoku-cell.block-dark {
+    background: var(--block-dark-background);
 }
 
 .sudoku-cell:focus {

@@ -34,6 +34,16 @@ def test_new_game_honors_clues_query_parameter(client):
     assert sum(cell != sudoku_logic.EMPTY for row in puzzle for cell in row) == 40
 
 
+def test_supported_difficulty_clue_counts_produce_unique_puzzles(client):
+    for clues in (45, 35, 30):
+        response = client.get(f'/new?clues={clues}')
+        puzzle = response.get_json()['puzzle']
+
+        assert response.status_code == 200
+        assert sum(cell != sudoku_logic.EMPTY for row in puzzle for cell in row) == clues
+        assert sudoku_logic.has_unique_solution(puzzle) is True
+
+
 def test_check_solution_requires_an_active_game(client):
     response = client.post('/check', json={'board': sudoku_logic.create_empty_board()})
 
